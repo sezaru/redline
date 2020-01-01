@@ -1,24 +1,21 @@
 defmodule Redline do
   alias Redline.Step
 
-  @type opts :: Step.options()
+  @type opt :: {:name, atom} | {:input, atom}
+  @type opts :: [opt]
 
   defmacro __using__(opts) do
-    quote bind_quoted: [opts: opts] do
+    opts = opts ++ [state: &Redline.State.new/0]
+
+    quote do
       import Redline
 
       alias Redline.{Impl, Step, State}
 
-      @behaviour Step
+      use Step, unquote(opts)
 
       Module.register_attribute(__MODULE__, :steps, accumulate: true)
       @before_compile Redline
-
-      @impl Step
-      def options, do: unquote(opts)
-
-      @impl Step
-      def new, do: State.new()
 
       @impl Step
       def run(input, state), do: Impl.run(input, state, steps())
