@@ -7,6 +7,7 @@ defmodule Redline.Step do
   @type opts :: [opt]
 
   @callback options() :: opts
+  @callback name() :: atom | nil
 
   @callback new() :: state
 
@@ -14,6 +15,7 @@ defmodule Redline.Step do
 
   defmacro __using__(opts) do
     {state, opts} = Keyword.pop(opts, :state, quote(do: %{}))
+    name = Keyword.get(opts, :name)
 
     quote do
       import Redline.Step
@@ -24,6 +26,9 @@ defmodule Redline.Step do
 
       @impl Step
       def options, do: unquote(opts)
+
+      @impl Step
+      def name, do: unquote(name)
 
       @impl Step
       def new do
