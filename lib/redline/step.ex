@@ -31,11 +31,9 @@ defmodule Redline.Step do
       def name, do: unquote(name)
 
       @impl Step
-      def new do
-        case is_function(unquote(state)) do
-          true -> unquote(state).()
-          false -> unquote(state)
-        end
+      case is_function(unquote(state)) do
+        true -> def new, do: unquote(state).()
+        false -> def new, do: unquote(state)
       end
     end
   end
