@@ -36,6 +36,20 @@ defmodule Test.Redline.StepTest do
     assert Steps.Step1WithState.name() == :step_1
   end
 
+  test "run/1 runs the step without initial state" do
+    {value, state} = Steps.Step1.run(1)
+
+    assert value == 2
+    assert state == %{}
+  end
+
+  test "run/1 runs the step with state without initial state" do
+    {value, state} = Steps.Step1WithState.run(1)
+
+    assert value == :stop
+    assert state == %{last: 1}
+  end
+
   test "run/2 runs the step" do
     state = Steps.Step1.new()
     

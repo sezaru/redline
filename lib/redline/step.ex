@@ -11,6 +11,7 @@ defmodule Redline.Step do
 
   @callback new() :: state
 
+  @callback run(input) :: {output, state}
   @callback run(input, state) :: {output, state}
 
   defmacro __using__(opts) do
@@ -35,6 +36,15 @@ defmodule Redline.Step do
         true -> def new, do: unquote(state).()
         false -> def new, do: unquote(state)
       end
+
+      @impl Step
+      def run(input) do
+        state = new()
+
+        run(input, state)
+      end
+
+      defoverridable run: 1
     end
   end
 end

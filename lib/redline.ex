@@ -20,6 +20,7 @@ defmodule Redline do
       @impl Step
       def run(input, state), do: Impl.run(input, state, steps())
 
+      @impl Step
       def run(input), do: Impl.run(input, steps())
     end
   end
