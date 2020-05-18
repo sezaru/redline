@@ -36,7 +36,7 @@ defmodule Test.RedlineTest do
 
   test "__using__/1 raises if pipeline has duplicated step names" do
     assert_raise CompilationError, fn ->
-      defmodule TestPipeline2 do
+      defmodule TestPipeline3 do
         alias Test.Redline.Steps.Step1
 
         use Redline, name: :pipeline
@@ -49,7 +49,7 @@ defmodule Test.RedlineTest do
 
   test "__using__/1 raises if pipeline has initial_input name" do
     assert_raise CompilationError, fn ->
-      defmodule TestPipeline3 do
+      defmodule TestPipeline4 do
         alias Test.Redline.Steps.Step1
 
         use Redline, name: :pipeline
@@ -61,7 +61,7 @@ defmodule Test.RedlineTest do
 
   test "__using__/1 raises if some step input is missing" do
     assert_raise CompilationError, fn ->
-      defmodule TestPipeline4 do
+      defmodule TestPipeline5 do
         alias Test.Redline.Steps.Step1
 
         use Redline, name: :pipeline
@@ -73,7 +73,7 @@ defmodule Test.RedlineTest do
 
   test "__using__/1 raises if one of step inputs is missing" do
     assert_raise CompilationError, fn ->
-      defmodule TestPipeline5 do
+      defmodule TestPipeline6 do
         alias Test.Redline.Steps.Step4
 
         use Redline, name: :pipeline
@@ -85,7 +85,7 @@ defmodule Test.RedlineTest do
 
   test "__using__/1 raises if some inner_step input is missing" do
     assert_raise CompilationError, fn ->
-      defmodule TestPipeline6 do
+      defmodule TestPipeline7 do
         alias Test.Redline.Steps.Step1
 
         use Redline, name: :pipeline
