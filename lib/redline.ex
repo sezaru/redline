@@ -27,7 +27,9 @@ defmodule Redline do
 
   defmacro __before_compile__(_) do
     quote do
-      def steps, do: @steps |> Enum.reverse()
+      @reversed_steps Enum.reverse(@steps)
+
+      def steps, do: @reversed_steps
     end
   end
 
