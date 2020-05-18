@@ -1,5 +1,5 @@
 defmodule Redline do
-  alias Redline.Step
+  alias Redline.{Step, StepsChecker}
 
   @type opt :: {:name, atom} | {:input, atom}
   @type opts :: [opt]
@@ -8,9 +8,9 @@ defmodule Redline do
     opts = opts ++ [state: &Redline.State.new/0]
 
     quote do
-      import Redline
-
       alias Redline.{Impl, Step, State}
+
+      import Redline
 
       use Step, unquote(opts)
 
@@ -27,7 +27,7 @@ defmodule Redline do
 
   defmacro __before_compile__(_) do
     quote do
-      @reversed_steps Enum.reverse(@steps)
+      @reversed_steps @steps |> Enum.reverse() |> StepsChecker.check(__MODULE__)
 
       def steps, do: @reversed_steps
     end

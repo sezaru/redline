@@ -1,16 +1,79 @@
 defmodule Test.RedlineTest do
+  alias Redline.Errors.CompilationError
+
   alias Test.Redline.Pipelines.{Pipeline1, Pipeline2}
 
   use ExUnit.Case
 
-  defmodule Pipeline do
-    use Redline, name: :pipeline, input: :some_input, state: %{some: :state}
+  test "__using__/1 creates a new pipeline" do
+    defmodule TestPipeline1 do
+      use Redline, name: :pipeline, input: :some_input, state: %{some: :state}
+    end
+
+    assert TestPipeline1.name() == :pipeline
+    assert TestPipeline1.new() == %{some: :state}
+    assert TestPipeline1.options() == [name: :pipeline, input: :some_input]
   end
 
-  test "__using__/1 creates a new pipeline" do
-    assert Pipeline.name() == :pipeline
-    assert Pipeline.new() == %{some: :state}
-    assert Pipeline.options() == [name: :pipeline, input: :some_input]
+  test "__using__/1 raises if pipeline has duplicated step names" do
+    assert_raise CompilationError, fn ->
+      defmodule TestPipeline2 do
+        alias Test.Redline.Steps.Step1
+
+        use Redline, name: :pipeline
+
+        step Step1, name: :step_1
+        step Step1, name: :step_1
+      end
+    end
+  end
+
+  test "__using__/1 raises if pipeline has initial_input name" do
+    assert_raise CompilationError, fn ->
+      defmodule TestPipeline3 do
+        alias Test.Redline.Steps.Step1
+
+        use Redline, name: :pipeline
+
+        step Step1, name: :initial_input
+      end
+    end
+  end
+
+  test "__using__/1 raises if some step input is missing" do
+    assert_raise CompilationError, fn ->
+      defmodule TestPipeline4 do
+        alias Test.Redline.Steps.Step1
+
+        use Redline, name: :pipeline
+
+        step Step1, input: :missing_step
+      end
+    end
+  end
+
+  test "__using__/1 raises if one of step inputs is missing" do
+    assert_raise CompilationError, fn ->
+      defmodule TestPipeline5 do
+        alias Test.Redline.Steps.Step4
+
+        use Redline, name: :pipeline
+
+        step Step4, inputs: [:initial_input, :missing_step]
+      end
+    end
+  end
+
+  test "__using__/1 raises if some inner_step input is missing" do
+    assert_raise CompilationError, fn ->
+      defmodule TestPipeline6 do
+        alias Test.Redline.Steps.Step1
+
+        use Redline, name: :pipeline
+
+        step [Step1, {Step1, name: :step_1_b, input: :missing_step}]
+      end
+    end
   end
 
   test "new/0 returns the pipeline state" do
