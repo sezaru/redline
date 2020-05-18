@@ -26,11 +26,11 @@ defmodule Test.RedlineTest do
       use Redline, name: :pipeline, inputs: [:lhs, :rhs]
 
       step Step1, name: :step_1_a, input: :lhs
-      step Step1, name: :step_1_a, input: :rhs
+      step Step1, name: :step_1_b, input: :rhs
     end
 
     assert TestPipeline2.name() == :pipeline
-    assert TestPipeline2.new() == %{}
+    assert TestPipeline2.new() == %{results: %{}, states: %{}}
     assert TestPipeline2.options() == [name: :pipeline, inputs: [:lhs, :rhs]]
   end
 
