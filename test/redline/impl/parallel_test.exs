@@ -1,7 +1,7 @@
 defmodule Test.Redline.Impl.ParallelTest do
   alias Redline.Impl.Parallel
 
-  alias Test.Redline.Steps.{Step1, Step2, Step3, Step4, Step1WithState, Step1WithError}
+  alias Test.Redline.Steps.{Step2, Step3, Step4, Step1WithState, Step1WithError}
 
   use ExUnit.Case
 
