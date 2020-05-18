@@ -32,7 +32,7 @@ defmodule Redline.Impl.Parallel do
 
   defp run_inner_step({module, %{name: name}}, input, state, parallel_task) do
     ParallelTask.add(parallel_task, name, fn ->
-      SingleInput.run_step_impl(input, name, module, state)
+      SingleInput.run_step(input, name, module, state)
     end)
   end
 
@@ -40,7 +40,7 @@ defmodule Redline.Impl.Parallel do
     ParallelTask.add(parallel_task, name, fn ->
       inputs = State.get_results!(state, inputs)
 
-      MultiInput.run_step_impl(inputs, name, module, state)
+      MultiInput.run_step(inputs, name, module, state)
     end)
   end
 
@@ -48,7 +48,7 @@ defmodule Redline.Impl.Parallel do
     ParallelTask.add(parallel_task, name, fn ->
       input = State.get_result!(state, input)
 
-      SingleInput.run_step_impl(input, name, module, state)
+      SingleInput.run_step(input, name, module, state)
     end)
   end
 
