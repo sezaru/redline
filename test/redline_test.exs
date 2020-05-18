@@ -24,14 +24,22 @@ defmodule Test.RedlineTest do
 
     assert value == 9
 
-    assert state.results == %{step_1: 2, step_2: 4, step_3: 5, step_4: 9, step_1_b: 3}
+    assert state.results == %{
+             step_1: 2,
+             step_2: 4,
+             step_3: 5,
+             step_4: 9,
+             step_1_b: 3,
+             initial_input: 1
+           }
+
     assert state.states == %{step_1: %{}, step_2: %{}, step_3: %{}, step_4: %{}, step_1_b: %{}}
 
     assert {value, state} = Pipeline2.run(1)
 
     assert value == :stop
 
-    assert state.results == %{step_a: 2, step_b: 2, step_1: :stop, step_4: 4}
+    assert state.results == %{step_a: 2, step_b: 2, step_1: :stop, step_4: 4, initial_input: 1}
     assert state.states == %{step_a: %{}, step_b: %{}, step_1: %{last: 2}, step_4: %{}}
   end
 
@@ -42,7 +50,15 @@ defmodule Test.RedlineTest do
 
     assert value == 9
 
-    assert state.results == %{step_1: 2, step_2: 4, step_3: 5, step_4: 9, step_1_b: 3}
+    assert state.results == %{
+             step_1: 2,
+             step_2: 4,
+             step_3: 5,
+             step_4: 9,
+             step_1_b: 3,
+             initial_input: 1
+           }
+
     assert state.states == %{step_1: %{}, step_2: %{}, step_3: %{}, step_4: %{}, step_1_b: %{}}
 
     state = Pipeline2.new()
@@ -51,14 +67,14 @@ defmodule Test.RedlineTest do
 
     assert value == :stop
 
-    assert state.results == %{step_a: 2, step_b: 2, step_1: :stop, step_4: 4}
+    assert state.results == %{step_a: 2, step_b: 2, step_1: :stop, step_4: 4, initial_input: 1}
     assert state.states == %{step_a: %{}, step_b: %{}, step_1: %{last: 2}, step_4: %{}}
 
     assert {value, state} = Pipeline2.run(2, state)
 
     assert value == [5, 6]
 
-    assert state.results == %{step_a: 3, step_b: 3, step_1: 5, step_4: 6}
+    assert state.results == %{step_a: 3, step_b: 3, step_1: 5, step_4: 6, initial_input: 2}
     assert state.states == %{step_a: %{}, step_b: %{}, step_1: %{last: 3}, step_4: %{}}
   end
 end

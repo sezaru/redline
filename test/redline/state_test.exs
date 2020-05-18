@@ -1,6 +1,6 @@
 defmodule Test.Redline.StateTest do
   alias Redline.State
-  
+
   alias Test.Redline.Steps.Step1WithState
 
   use ExUnit.Case

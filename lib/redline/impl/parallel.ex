@@ -2,20 +2,6 @@ defmodule Redline.Impl.Parallel do
   alias Redline.State
   alias Redline.Impl.{SingleInput, MultiInput}
 
-  def run_step(state, input, step) when is_list(step) do
-    results =
-      step
-      |> Enum.reduce(ParallelTask.new(), fn inner_step, parallel_task ->
-        run_inner_step(inner_step, input, state, parallel_task)
-      end)
-      |> ParallelTask.perform()
-
-    state = Enum.reduce(results, state, &update_state/2)
-    results = extract_results(results)
-
-    {results, state}
-  end
-
   def run_step(state, step) when is_list(step) do
     results =
       step
@@ -30,12 +16,6 @@ defmodule Redline.Impl.Parallel do
     {results, state}
   end
 
-  defp run_inner_step({module, %{name: name}}, input, state, parallel_task) do
-    ParallelTask.add(parallel_task, name, fn ->
-      SingleInput.run_step(input, name, module, state)
-    end)
-  end
-
   defp run_inner_step({module, %{name: name, inputs: inputs}}, state, parallel_task) do
     ParallelTask.add(parallel_task, name, fn ->
       inputs = State.get_results!(state, inputs)
@@ -47,6 +27,14 @@ defmodule Redline.Impl.Parallel do
   defp run_inner_step({module, %{name: name, input: input}}, state, parallel_task) do
     ParallelTask.add(parallel_task, name, fn ->
       input = State.get_result!(state, input)
+
+      SingleInput.run_step(input, name, module, state)
+    end)
+  end
+
+  defp run_inner_step({module, %{name: name}}, state, parallel_task) do
+    ParallelTask.add(parallel_task, name, fn ->
+      input = State.get_result!(state, :initial_input)
 
       SingleInput.run_step(input, name, module, state)
     end)

@@ -52,7 +52,7 @@ defmodule Test.Redline.StepTest do
 
   test "run/2 runs the step" do
     state = Steps.Step1.new()
-    
+
     {value, state} = Steps.Step1.run(1, state)
 
     assert value == 2
@@ -66,7 +66,7 @@ defmodule Test.Redline.StepTest do
 
   test "run/2 runs the step with state" do
     state = Steps.Step1WithState.new()
-    
+
     {value, state} = Steps.Step1WithState.run(1, state)
 
     assert value == :stop

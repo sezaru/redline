@@ -1,6 +1,6 @@
 defmodule Test.Redline.Pipelines.Pipeline1 do
   alias Test.Redline.Steps
-  
+
   use Redline, name: :pipeline
 
   step Steps.Step1

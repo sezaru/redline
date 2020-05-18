@@ -11,7 +11,8 @@ defmodule Redline.Impl do
 
   defp run_first_step(state, initial_input, [step | steps]) do
     state
-    |> run_step(initial_input, step)
+    |> State.update_results(:initial_input, initial_input)
+    |> run_step(step)
     |> run_next_step(steps)
   end
 
@@ -26,13 +27,7 @@ defmodule Redline.Impl do
     |> run_next_step(steps)
   end
 
-  defp run_step(state, input, {:step, step}) when is_list(step),
-    do: Parallel.run_step(state, input, step)
-
-  defp run_step(state, input, step),
-    do: SingleInput.run_step(state, input, step)
-
   defp run_step(state, {:step, step}) when is_list(step), do: Parallel.run_step(state, step)
   defp run_step(state, {:step, _, %{inputs: _}} = step), do: MultiInput.run_step(state, step)
-  defp run_step(state, {:step, _, %{input: _}} = step), do: SingleInput.run_step(state, step)
+  defp run_step(state, step), do: SingleInput.run_step(state, step)
 end

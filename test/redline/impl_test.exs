@@ -15,7 +15,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == 4
 
-    assert state.results == %{step_1: 2, step_2: 4}
+    assert state.results == %{step_1: 2, step_2: 4, initial_input: 1}
     assert state.states == %{step_1: %{}, step_2: %{}}
   end
 
@@ -26,7 +26,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == [3, 4]
 
-    assert state.results == %{step_2: 3, step_3: 4}
+    assert state.results == %{step_2: 3, step_3: 4, initial_input: 1}
     assert state.states == %{step_2: %{}, step_3: %{}}
   end
 
@@ -44,7 +44,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == [4, 5]
 
-    assert state.results == %{step_1: 2, step_2: 4, step_3: 5}
+    assert state.results == %{step_1: 2, step_2: 4, step_3: 5, initial_input: 1}
     assert state.states == %{step_1: %{}, step_2: %{}, step_3: %{}}
   end
 
@@ -62,7 +62,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == 7
 
-    assert state.results == %{step_2: 3, step_3: 4, step_4: 7}
+    assert state.results == %{step_2: 3, step_3: 4, step_4: 7, initial_input: 1}
     assert state.states == %{step_2: %{}, step_3: %{}, step_4: %{}}
   end
 
@@ -78,7 +78,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == 5
 
-    assert state.results == %{step_1: 3, step_2: 5}
+    assert state.results == %{step_1: 3, step_2: 5, initial_input: 2}
     assert state.states == %{step_1: %{}, step_2: %{}}
   end
 
@@ -91,7 +91,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == [3, 4]
 
-    assert state.results == %{step_2: 3, step_3: 4}
+    assert state.results == %{step_2: 3, step_3: 4, initial_input: 1}
     assert state.states == %{step_2: %{}, step_3: %{}}
   end
 
@@ -114,7 +114,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == [4, 5]
 
-    assert state.results == %{step_1: 2, step_2: 4, step_3: 5}
+    assert state.results == %{step_1: 2, step_2: 4, step_3: 5, initial_input: 1}
     assert state.states == %{step_1: %{}, step_2: %{}, step_3: %{}}
   end
 
@@ -137,7 +137,7 @@ defmodule Test.Redline.ImplTest do
 
     assert value == 7
 
-    assert state.results == %{step_2: 3, step_3: 4, step_4: 7}
+    assert state.results == %{step_2: 3, step_3: 4, step_4: 7, initial_input: 1}
     assert state.states == %{step_2: %{}, step_3: %{}, step_4: %{}}
   end
 end

@@ -5,19 +5,6 @@ defmodule Test.Redline.Impl.ParallelTest do
 
   use ExUnit.Case
 
-  test "run_step/3 runs a step in parallel" do
-    state = %{results: %{}, states: %{}}
-
-    step = [{Step1, %{name: :step_a}}, {Step1, %{name: :step_b}}]
-
-    {value, state} = Parallel.run_step(state, 1, step)
-
-    assert value == [2, 2]
-
-    assert state.results == %{step_a: 2, step_b: 2}
-    assert state.states == %{step_a: %{}, step_b: %{}}
-  end
-
   test "run_step/2 runs a step in parallel" do
     state = %{results: %{step_1: 2}, states: %{step_1: %{}}}
 

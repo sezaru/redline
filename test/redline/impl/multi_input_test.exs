@@ -25,13 +25,14 @@ defmodule Test.Redline.Impl.MultiInputTest do
     inputs = {4, 5}
     name = :step_4
     module = Step4
+
     state = %{
       results: %{step_1: 2, step_2: 4, step_3: 5},
       states: %{step_1: %{}, step_2: %{}, step_3: %{}}
     }
 
     {value, state} = MultiInput.run_step(inputs, name, module, state)
-    
+
     assert value == 9
     assert state == %{}
   end

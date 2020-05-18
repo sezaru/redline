@@ -1,18 +1,10 @@
 defmodule Redline.Impl.SingleInput do
   alias Redline.State
 
-  def run_step(state, input, step) do
+  def run_step(state, step) do
     {_, module, %{name: name}} = step
 
-    {result, step_state} = run_step(input, name, module, state)
-
-    state = State.update_step(state, name, result, step_state)
-
-    {result, state}
-  end
-
-  def run_step(state, step) do
-    {_, module, %{name: name, input: input}} = step
+    input = get_step_input(step)
 
     {result, step_state} = state |> State.get_result!(input) |> run_step(name, module, state)
 
@@ -26,4 +18,7 @@ defmodule Redline.Impl.SingleInput do
 
     module.run(input, step_state)
   end
+
+  defp get_step_input({_, _, %{input: input}}), do: input
+  defp get_step_input(_), do: :initial_input
 end

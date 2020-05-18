@@ -5,19 +5,6 @@ defmodule Test.Redline.Impl.SingleInputTest do
 
   use ExUnit.Case
 
-  test "run_step/3 runs a step with single input" do
-    state = %{results: %{}, states: %{}}
-
-    step = {:step, Step1, %{name: :step_1}}
-
-    {value, state} = SingleInput.run_step(state, 1, step)
-
-    assert value == 2
-
-    assert state.results == %{step_1: 2}
-    assert state.states == %{step_1: %{}}
-  end
-
   test "run_step/2 runs a step with single input" do
     state = %{results: %{step_1: 2}, states: %{step_1: %{}}}
 
