@@ -5,6 +5,9 @@ defmodule Test.Redline.StepTest do
 
   defmodule Step do
     use Redline.Step, name: :step, input: :some_input, state: %{some: :state}
+
+    @impl Redline.Step
+    def run(input, state), do: {input, state}
   end
 
   test "__using__/1 creates a new pipeline" do
