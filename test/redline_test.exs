@@ -7,11 +7,15 @@ defmodule Test.RedlineTest do
 
   test "__using__/1 creates a new pipeline" do
     defmodule TestPipeline1 do
-      use Redline, name: :pipeline, input: :some_input, state: %{some: :state}
+      alias Test.Redline.Steps.Step1
+
+      use Redline, name: :pipeline, input: :some_input
+
+      step Step1, input: :some_input
     end
 
     assert TestPipeline1.name() == :pipeline
-    assert TestPipeline1.new() == %{some: :state}
+    assert TestPipeline1.new() == %{results: %{}, states: %{}}
     assert TestPipeline1.options() == [name: :pipeline, input: :some_input]
   end
 

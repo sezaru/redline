@@ -7,7 +7,7 @@ defmodule Redline do
   defmacro __using__(opts) do
     inputs_names = opts[:input] || opts[:inputs] || :initial_input
 
-    opts = opts ++ [state: &Redline.State.new/0]
+    opts = opts |> Keyword.put(:state, &Redline.State.new/0)
 
     quote do
       alias Redline.{Impl, Step, State}
