@@ -20,8 +20,7 @@ defmodule Redline.MixProject do
 
   defp deps do
     [
-      {:excoveralls, "~> 0.12.2", only: :test},
-      {:parallel_task, "~> 0.1.0"}
+      {:excoveralls, "~> 0.12.2", only: :test}
     ]
   end
 

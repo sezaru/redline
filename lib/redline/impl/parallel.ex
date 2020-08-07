@@ -5,39 +5,32 @@ defmodule Redline.Impl.Parallel do
   def run_step(state, step) when is_list(step) do
     results =
       step
-      |> Enum.reduce(ParallelTask.new(), fn inner_step, parallel_task ->
-        run_inner_step(inner_step, state, parallel_task)
-      end)
-      |> ParallelTask.perform()
+      |> Enum.map(&Task.async(fn -> run_inner_step(&1, state) end))
+      |> Enum.map(&Task.await(&1, :infinity))
 
     state = Enum.reduce(results, state, &update_state/2)
-    results = extract_results(results)
+    results = extract_results(results) |> IO.inspect()
 
     {results, state}
   end
 
-  defp run_inner_step({module, %{name: name, inputs: inputs}}, state, parallel_task) do
-    ParallelTask.add(parallel_task, name, fn ->
-      inputs = State.get_results!(state, inputs)
+  defp run_inner_step({module, %{name: name, inputs: inputs}}, state) do
+    result = state |> State.get_results!(inputs) |> MultiInput.run_step(name, module, state)
 
-      MultiInput.run_step(inputs, name, module, state)
-    end)
+    {name, result}
   end
 
-  defp run_inner_step({module, %{name: name, input: input}}, state, parallel_task) do
-    ParallelTask.add(parallel_task, name, fn ->
-      input = State.get_result!(state, input)
+  defp run_inner_step({module, %{name: name, input: input}}, state) do
+    result = state |> State.get_result!(input) |> SingleInput.run_step(name, module, state)
 
-      SingleInput.run_step(input, name, module, state)
-    end)
+    {name, result}
   end
 
-  defp run_inner_step({module, %{name: name}}, state, parallel_task) do
-    ParallelTask.add(parallel_task, name, fn ->
-      input = State.get_result!(state, :initial_input)
+  defp run_inner_step({module, %{name: name}}, state) do
+    result =
+      state |> State.get_result!(:initial_input) |> SingleInput.run_step(name, module, state)
 
-      SingleInput.run_step(input, name, module, state)
-    end)
+    {name, result}
   end
 
   defp update_state({name, {result, step_state}}, state),
