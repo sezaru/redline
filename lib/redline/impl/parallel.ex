@@ -9,7 +9,7 @@ defmodule Redline.Impl.Parallel do
       |> Enum.map(&Task.await(&1, :infinity))
 
     state = Enum.reduce(results, state, &update_state/2)
-    results = extract_results(results) |> IO.inspect()
+    results = extract_results(results)
 
     {results, state}
   end
